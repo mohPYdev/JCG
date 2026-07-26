@@ -402,16 +402,27 @@ object CompareCGs {
             .flatMap { caller =>
                 dynamicCG(caller).flatMap { dynamicCS =>
                     
+                    // val staticTargets: Set[Method] = {
+                    //     val sites = staticCG.getOrElse(caller, Set.empty)
+                    //     val exactMatch = sites.find { scs =>
+                    //         scs.pc.isDefined && dynamicCS.pc.isDefined &&
+                    //         scs.pc == dynamicCS.pc && scs.line == dynamicCS.line
+                    //     }
+                    //     exactMatch match {
+                    //         case Some(cs) => cs.targets
+                    //         case None     => sites.filter(_.line == dynamicCS.line).flatMap(_.targets)
+                    //     }
+                    // }
                     val staticTargets: Set[Method] = {
                         val sites = staticCG.getOrElse(caller, Set.empty)
-                        val exactMatch = sites.find { scs =>
+                        val exactMatch = sites.filter { scs =>
                             scs.pc.isDefined && dynamicCS.pc.isDefined &&
                             scs.pc == dynamicCS.pc && scs.line == dynamicCS.line
                         }
-                        exactMatch match {
-                            case Some(cs) => cs.targets
-                            case None     => sites.filter(_.line == dynamicCS.line).flatMap(_.targets)
-                        }
+                        if (exactMatches.nonEmpty)
+                            exactMatches.flatMap(_.targets)
+                        else
+                            sites.filter(_.line == dynamicCS.line).flatMap(_.targets)
                     }
 
                     // Find callees in dynamic that are NOT in static at this exact site
