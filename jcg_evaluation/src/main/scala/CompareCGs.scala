@@ -415,7 +415,7 @@ object CompareCGs {
                     // }
                     val staticTargets: Set[Method] = {
                         val sites = staticCG.getOrElse(caller, Set.empty)
-                        val exactMatch = sites.filter { scs =>
+                        val exactMatches = sites.filter { scs =>
                             scs.pc.isDefined && dynamicCS.pc.isDefined &&
                             scs.pc == dynamicCS.pc && scs.line == dynamicCS.line
                         }
