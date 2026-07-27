@@ -95,6 +95,9 @@ object OpalJCGAdatper extends JCGTestAdapter {
             .withValue("org.opalj.fpcf.analyses.AllocationSiteBasedPointsToAnalysis.mergeStringConstants", ConfigValueFactory.fromAnyRef(false))
             .withValue("org.opalj.fpcf.analyses.AllocationSiteBasedPointsToAnalysis.mergeClassConstants", ConfigValueFactory.fromAnyRef(false))
 
+        config = config
+            .withValue("org.opalj.fpcf.analyses.cg.reflection.ReflectionRelatedCallsAnalysis.highSoundness", ConfigValueFactory.fromAnyRef("all"));
+
         // gather the class files to be loaded
         val cfReader = JavaClassFileReader(theConfig = config)
         val targetClassFiles = cfReader.ClassFiles(new File(target))
