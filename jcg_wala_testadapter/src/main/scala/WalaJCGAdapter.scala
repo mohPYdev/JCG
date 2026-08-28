@@ -94,6 +94,12 @@ object WalaJCGAdapter extends JCGTestAdapter {
             } else if (algorithm.contains("RTA")) {
                 val rtaBuilder = Util.makeRTABuilder(options, cache, classHierarchy, scope)
                 rtaBuilder.makeCallGraph(options, new NullProgressMonitor)
+            } else if (algorithm.contains("0-Obj")) {
+                val objBuilder = Util.makeNObjBuilder(0, options, cache, classHierarchy, scope)
+                objBuilder.makeCallGraph(options)
+            } else if (algorithm.contains("1-Obj")) {
+                val objBuilder = Util.makeNObjBuilder(1, options, cache, classHierarchy, scope)
+                objBuilder.makeCallGraph(options)
             } else if (algorithm.contains("CHA")) {
                 import com.ibm.wala.ipa.callgraph.cha.CHACallGraph
                 val CG = new CHACallGraph(classHierarchy)

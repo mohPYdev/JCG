@@ -24,3 +24,5 @@ jre.conf
 local.sbt
 */build.properties
 /fingerprints
+.vscode
+.metals

@@ -36,8 +36,12 @@ import org.opalj.br.instructions.MethodInvocationInstruction
  * @author Florian Kuebler
  */
 object DoopJCGAdapter extends JCGTestAdapter {
+    override def possibleAlgorithms(): Array[String] = Array(
+        "context-insensitive", "1-call-site-sensitive", "context-insensitive-plus", // 0-CFA, 1-CFA, 0-1-CFA?
+        "types-only", // RTA
+        "1-object-sensitive" // 1-Obj (0-Obj = context-insensitive)
+    )
 
-    override def possibleAlgorithms(): Array[String] = Array("context-insensitive")
     override def frameworkName(): String = "Doop"
 
     private def createJsonRepresentation(
@@ -286,9 +290,10 @@ object DoopJCGAdapter extends JCGTestAdapter {
 
         val outDir = Files.createTempDirectory(null).toFile
 
-        assert(algorithm == "context-insensitive")
+        assert(possibleAlgorithms().contains(algorithm))
 
-        var args = Array("./doop", "-a", "context-insensitive", "-t", "1440", "--platform", "java_8", "-i", target) ++ classPath
+        var args = Array("./doop", "-a", algorithm, "-t", "1440", "--platform", "java_8", "-i", target) ++ classPath
+        
         if (analyzeJDK) {
            args ++= JRELocation.getAllJREJars(JDKPath).map(_.getCanonicalPath)
         }
